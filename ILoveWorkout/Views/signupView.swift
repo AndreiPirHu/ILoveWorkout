@@ -8,12 +8,10 @@
 import SwiftUI
 import FirebaseAuth
 
-struct signupView: View {
+struct SignupView: View {
     @Binding var currentShowingView: String
-    @AppStorage("uid") var userID: String = ""
     
-    @State private var email: String = ""
-    @State private var password: String = ""
+    @ObservedObject var viewModel = SignupViewModel()
     
     
     var body: some View {
@@ -36,11 +34,11 @@ struct signupView: View {
                 
                 HStack {
                     Image(systemName: "mail")
-                    TextField("Email", text:$email)
+                    TextField("Email", text:$viewModel.email)
                     
                     Spacer()
                     
-                    if(email.count != 0) {
+                    if(viewModel.email.count != 0) {
                         
                         Image(systemName: "checkmark")
                             .fontWeight(.bold)
@@ -62,11 +60,11 @@ struct signupView: View {
                 
                 HStack {
                     Image(systemName: "lock")
-                    SecureField("Password", text:$password)
+                    SecureField("Password", text:$viewModel.password)
                     
                     Spacer()
                     
-                    if (password.count != 0) {
+                    if (viewModel.password.count != 0) {
                         Image(systemName: "checkmark")
                             .fontWeight(.bold)
                             .foregroundColor(.green)
@@ -98,18 +96,7 @@ struct signupView: View {
                 
                 
                 Button {
-                    Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
-                        if let error = error {
-                            print(error)
-                            return
-                        }
-
-                        if let authResult = authResult {
-                            print(authResult.user.uid)
-                            userID = authResult.user.uid
-                        }
-                        
-                    }
+                    viewModel.createUser()
 
                 } label: {
                     Text("Create New Account")

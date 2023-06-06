@@ -11,15 +11,7 @@ import FirebaseAuth
 import Charts
 
 struct ProfileView: View {
-    @AppStorage("uid") var userID: String = ""
-    @State var logoutOptions = false
-    @State private var userIsLoggedIn = false
-    @State private var currentIndex = 0
-    
-    
-    private var numberOfImages = 6
-    private let timer = Timer.publish(every: 2, on: .main, in: .common
-    ).autoconnect()
+    @ObservedObject var viewModel = ProfileViewModel()
     
     var body: some View {
         VStack {
@@ -28,8 +20,8 @@ struct ProfileView: View {
             BarChartsView()
             
             GeometryReader { proxy in
-                TabView(selection: $currentIndex) {
-                    ForEach(0..<numberOfImages) { num in
+                TabView(selection: $viewModel.currentIndex) {
+                    ForEach(0..<viewModel.numberOfImages) { num in
                         Image("\(num)")
                             .resizable()
                             .scaledToFill()
@@ -41,8 +33,8 @@ struct ProfileView: View {
                     .padding()
                     .frame(width: proxy.size.width, height:
                             proxy.size.height / 1)
-                    .onReceive(timer, perform: { _ in
-                        next()
+                    .onReceive(viewModel.timer, perform: { _ in
+                        viewModel.next()
                         
                         })
                 
@@ -55,31 +47,19 @@ struct ProfileView: View {
         
     }
     
-    func previous() {
-        withAnimation {
-            currentIndex = currentIndex > 0 ? currentIndex
-            - 1 : numberOfImages  - 1
-        }
-    }
-
-    func next() {
-        withAnimation {
-            currentIndex = currentIndex <
-                numberOfImages ? currentIndex + 1 : 0
-            }
-        }
+    
     
     var controls: some View {
         HStack {
             Button {
-                previous()
+                viewModel.previous()
             } label: {
                 Image(systemName: "chevron.left")
                     .fontWeight(.bold)
                     .foregroundColor(.black)
             }
             Button {
-                next()
+                viewModel.next()
             } label: {
                 Image(systemName: "chevron.right")
                     .fontWeight(.bold)
@@ -113,7 +93,7 @@ struct ProfileView: View {
             
             Spacer()
             Button {
-                logoutOptions.toggle()
+                viewModel.logoutOptions.toggle()
             } label: {
                 Image(systemName: "gear")
                     .font(.system(size: 24, weight: .bold))
@@ -124,21 +104,10 @@ struct ProfileView: View {
             }
         }
         .padding()
-        .actionSheet(isPresented: $logoutOptions) {
+        .actionSheet(isPresented: $viewModel.logoutOptions) {
             .init(title: Text("Alert"), message: Text("Do you want to logout?"), buttons: [
                 .destructive(Text("Sign out"), action: {
-                    print("Succes! You signed out")
-                    let firebaseAuth = Auth.auth()
-                    do {
-                        try firebaseAuth.signOut()
-                        withAnimation {
-                            userID = ""
-                        }
-                    } catch let signOutError as NSError {
-                        print("Error signing out: #€", signOutError)
-                    }
-                    
-                    //try? Auth.auth().signOut()
+                    viewModel.signOut()
                 }),
                 .cancel()
              ])

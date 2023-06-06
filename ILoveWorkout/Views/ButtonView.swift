@@ -12,43 +12,21 @@ import FirebaseAuth
 
 
 struct ButtonView: View {
-    let db = Firestore.firestore()
-    let currentUser = Auth.auth().currentUser
-    
-    
-    @State var content : String = ""
-    @Environment(\.presentationMode) var presentationMode
-    
-    
-    
+    @ObservedObject var viewModel = ButtonViewModel()
     
     var body: some View {
         VStack{
-            TextEditor(text: $content)
+            TextEditor(text: $viewModel.content)
                 .background(.gray)
-                .onTapGesture {
-                    //Kanske inte behövs?, hade cleartext behövs inte än.
-                }
         }
         .navigationBarItems(trailing: Button("Save") {
-            saveExercise(workoutName: content)
-            presentationMode.wrappedValue.dismiss()
+            viewModel.saveExercise(workoutName: viewModel.content)
+            viewModel.presentationMode.wrappedValue.dismiss()
         })
     }
     
 
     
-    func saveExercise(workoutName: String) {
-        if let currentUser {
-        db.collection("users").document(currentUser.uid).collection("exercises").addDocument(data:
-                                                                                                   ["name" : workoutName,
-                                                                                                    "exercise" : "",
-                                                                                                    "done": false,
-                                                                                                    "date": Date(),
-                                                                                                    "workoutCount": 1])
-            }
-
-        }
         
     
 }

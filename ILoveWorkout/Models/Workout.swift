@@ -11,7 +11,7 @@ import Firebase
 import FirebaseAuth
 
 
-struct WorkoutItem : Codable, Identifiable, Hashable {
+struct Workout : Codable, Identifiable, Hashable {
     
     
     @DocumentID var id : String?

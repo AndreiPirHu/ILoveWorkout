@@ -9,15 +9,14 @@ import SwiftUI
 import FirebaseAuth
 
 struct AuthView: View {
-    @State private var currentViewShowing: String = "login" //login or signup
-    
+    @ObservedObject var viewModel = AuthViewModel()
     
     var body: some View {
-        if(currentViewShowing == "login") {
-            loginView(currentShowingView: $currentViewShowing)
+        if(viewModel.currentViewShowing == "login") {
+            LoginView(currentShowingView: $viewModel.currentViewShowing)
                 .preferredColorScheme(.light)
         } else {
-            signupView(currentShowingView: $currentViewShowing)
+            SignupView(currentShowingView: $viewModel.currentViewShowing)
                 .preferredColorScheme(.dark)
                 .transition(.move(edge: .bottom))
         }
