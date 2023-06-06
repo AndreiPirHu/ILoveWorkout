@@ -11,8 +11,9 @@ import Firebase
 import FirebaseAuth
 
 
-struct ButtonView: View {
-    @ObservedObject var viewModel = ButtonViewModel()
+struct AddExerciseView: View {
+    @Environment(\.presentationMode) var presentationMode
+    @ObservedObject var viewModel = AddExerciseViewModel()
     
     var body: some View {
         VStack{
@@ -20,8 +21,8 @@ struct ButtonView: View {
                 .background(.gray)
         }
         .navigationBarItems(trailing: Button("Save") {
-            viewModel.saveExercise(workoutName: viewModel.content)
-            viewModel.presentationMode.wrappedValue.dismiss()
+            viewModel.saveExercise(exerciseName: viewModel.content)
+            presentationMode.wrappedValue.dismiss()
         })
     }
     

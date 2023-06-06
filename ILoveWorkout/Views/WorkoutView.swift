@@ -35,7 +35,7 @@ struct WorkoutView: View {
                     }
                 }
             }.navigationBarTitle("Exercise List")
-                .navigationBarItems(trailing: NavigationLink(destination: ButtonView())
+                .navigationBarItems(trailing: NavigationLink(destination: AddExerciseView())
                                     {
                     Image(systemName: "plus.circle")
                         .transition(.move(edge: .bottom

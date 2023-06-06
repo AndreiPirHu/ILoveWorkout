@@ -10,14 +10,14 @@ import Firebase
 import FirebaseAuth
 
 class WorkoutViewModel: ObservableObject {
-    @Published var workoutItems = [Workout]()
+    @Published var workoutItems = [Exercise]()
     @Published var logoutOptions = false
     
     let db = Firestore.firestore()
     let currentUser = Auth.auth().currentUser
     
     
-    func workoutDone(workoutItems: Workout) {
+    func workoutDone(workoutItems: Exercise) {
         
         if let user = self.currentUser {
             if let documentid = workoutItems.id {
@@ -53,7 +53,7 @@ class WorkoutViewModel: ObservableObject {
                     for document in snapshot.documents {
 
                         let result = Result {
-                            try document.data(as: Workout.self)
+                            try document.data(as: Exercise.self)
                         }
                         switch result  {
                         case .success(let workoutitem)  :

@@ -11,18 +11,17 @@ import Firebase
 import FirebaseAuth
 
 
-class ButtonViewModel: ObservableObject {
-    @Environment(\.presentationMode) var presentationMode
+class AddExerciseViewModel: ObservableObject {
     @Published var content : String = ""
     
     let db = Firestore.firestore()
     let currentUser = Auth.auth().currentUser
     
     
-    func saveExercise(workoutName: String) {
+    func saveExercise(exerciseName: String) {
         if let currentUser {
         db.collection("users").document(currentUser.uid).collection("exercises").addDocument(data:
-            ["name" : workoutName,
+            ["name" : exerciseName,
              "exercise" : "",
              "done": false,
              "date": Date(),

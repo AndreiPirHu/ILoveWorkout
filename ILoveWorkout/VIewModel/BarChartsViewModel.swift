@@ -16,7 +16,7 @@ class BarChartsViewModel: ObservableObject {
     
     let db = Firestore.firestore()
     @Published var currentUser = Auth.auth().currentUser
-    @Published var workoutCounter = [Workout]()
+    @Published var workoutCounter = [Exercise]()
     
     
     
@@ -33,7 +33,7 @@ class BarChartsViewModel: ObservableObject {
                     for document in snapshot.documents {
                         
                         let result = Result {
-                            try document.data(as: Workout.self)
+                            try document.data(as: Exercise.self)
                         }
                         switch result  {
                         case .success(let workoutcount)  :
