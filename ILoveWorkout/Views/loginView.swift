@@ -8,15 +8,11 @@
 import SwiftUI
 import FirebaseAuth
 
-struct loginView: View {
-    
+struct LoginView: View {
     
     @Binding var currentShowingView: String
-    @AppStorage("uid") var userID: String = ""
     
-    @State private var email: String = ""
-    @State private var password: String = ""
-    
+    @ObservedObject var viewModel = LoginViewModel()
     
     var body: some View {
         ZStack {
@@ -37,11 +33,11 @@ struct loginView: View {
                 
                 HStack {
                     Image(systemName: "mail")
-                    TextField("Email", text:$email)
+                    TextField("Email", text:$viewModel.email)
                     
                     Spacer()
                     
-                    if(email.count != 0) {
+                    if(viewModel.email.count != 0) {
                         
                         Image(systemName: "checkmark")
                             .fontWeight(.bold)
@@ -61,11 +57,11 @@ struct loginView: View {
                 
                 HStack {
                     Image(systemName: "lock")
-                    SecureField("Password", text:$password)
+                    SecureField("Password", text:$viewModel.password)
                     
                     Spacer()
                     
-                    if (password.count != 0) {
+                    if (viewModel.password.count != 0) {
                         Image(systemName: "checkmark")
                             .fontWeight(.bold)
                             .foregroundColor(.green)
@@ -94,22 +90,7 @@ struct loginView: View {
                 Spacer()
                 
                 Button {
-                    Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
-                        if let error = error {
-                            print(error)
-                            return
-                        }
-                        
-                        if let authResult = authResult {
-                            print(authResult.user.uid)
-                            withAnimation {
-                                userID = authResult.user.uid
-                                    
-                                
-                            }
-                        }
-                    }
-                    
+                    viewModel.signIn()
                 } label: {
                     Text("Sign in")
                         .foregroundColor(.white)

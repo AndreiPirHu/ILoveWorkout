@@ -9,12 +9,13 @@ import SwiftUI
 import Firebase
 import FirebaseAuth
 
-struct ContentView: View {
-    @AppStorage("uid") var userID: String = ""
+struct HomeView: View {
+    @ObservedObject var viewModel = HomeViewModel()
+    
 
     var body: some View {
         
-        if userID == "" {
+        if viewModel.userID == "" {
             AuthView()
         } else {
             TabView {
@@ -43,6 +44,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        HomeView()
     }
 }

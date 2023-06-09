@@ -21,7 +21,7 @@ struct ILoveWorkoutApp: App {
     
     var body: some Scene {
         WindowGroup {
-            FirstScreenView()
+            WelcomeScreenView()
         }
     }
 }

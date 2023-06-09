@@ -10,8 +10,8 @@ import Firebase
 import FirebaseAuth
 
 
-struct FirstScreenView: View {
-    @State private var isActive = false
+struct WelcomeScreenView: View {
+    @ObservedObject var viewModel = WelcomeScreenViewModel()
     
     var body: some View {
         NavigationView {
@@ -24,10 +24,10 @@ struct FirstScreenView: View {
                         .foregroundColor(.white)
                     Spacer()
                     NavigationLink (destination:
-                                   ContentView(), isActive:
-                                        $isActive) {
+                                   HomeView(), isActive:
+                                        $viewModel.isActive) {
                         Button(action: {
-                            isActive = true
+                            viewModel.continueButtonPressed()
                         }) {
                             HStack {
                                 Image(systemName: "plus.circle")
@@ -58,6 +58,6 @@ struct FirstScreenView: View {
 
 struct LandingView_Previews: PreviewProvider {
     static var previews: some View {
-        FirstScreenView()
+        WelcomeScreenView()
     }
 }
